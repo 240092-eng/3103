@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Firebase App</title>
 </head>
 <body>
@@ -10,72 +10,86 @@
 <button id="logout" style="display:none;">Выйти</button>
 
 <div id="form" style="display:none;">
-  <input id="message" placeholder="Введите сообщение">
+  <input id="message" placeholder="Введите сообщение" />
   <button id="send">Отправить</button>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { 
-  getAuth, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut,
-  onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { 
+    getAuth, 
+    signInWithPopup, 
+    GoogleAuthProvider, 
+    signOut,
+    onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { 
-  getFirestore, 
-  collection, 
-  addDoc 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc 
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ВСТАВЬ СВОЙ CONFIG!
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "ТВОЙ_KEY",
-  authDomain: "ТВОЙ_PROJECT.firebaseapp.com",
-  projectId: "ТВОЙ_ID",
+  apiKey: "AIzaSyB7VHLS8mZGA2ibzgdjP9Rh_CYbSCOXy4E",
+  authDomain: "project-1058159525962641435.firebaseapp.com",
+  projectId: "project-1058159525962641435",
+  storageBucket: "project-1058159525962641435.firebasestorage.app",
+  messagingSenderId: "439272881011",
+  appId: "1:439272881011:web:0a311dcd8356483941a306",
+  measurementId: "G-JJ6FG1MJDJ"
 };
+  const firebaseConfig = {
+    apiKey: "ТВОЙ_API_KEY",
+    authDomain: "ТВОЙ_PROJECT.firebaseapp.com",
+    projectId: "ТВОЙ_PROJECT_ID",
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-const provider = new GoogleAuthProvider();
+  const provider = new GoogleAuthProvider();
 
-const loginBtn = document.getElementById("login");
-const logoutBtn = document.getElementById("logout");
-const form = document.getElementById("form");
+  const loginBtn = document.getElementById("login");
+  const logoutBtn = document.getElementById("logout");
+  const form = document.getElementById("form");
 
-loginBtn.onclick = async () => {
-  await signInWithPopup(auth, provider);
-};
+  loginBtn.onclick = async () => {
+    await signInWithPopup(auth, provider);
+  };
 
-logoutBtn.onclick = async () => {
-  await signOut(auth);
-};
+  logoutBtn.onclick = async () => {
+    await signOut(auth);
+  };
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loginBtn.style.display = "none";
-    logoutBtn.style.display = "block";
-    form.style.display = "block";
-  } else {
-    loginBtn.style.display = "block";
-    logoutBtn.style.display = "none";
-    form.style.display = "none";
-  }
-});
-
-document.getElementById("send").onclick = async () => {
-  const text = document.getElementById("message").value;
-
-  await addDoc(collection(db, "messages"), {
-    text: text,
-    user: auth.currentUser.email
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginBtn.style.display = "none";
+      logoutBtn.style.display = "block";
+      form.style.display = "block";
+    } else {
+      loginBtn.style.display = "block";
+      logoutBtn.style.display = "none";
+      form.style.display = "none";
+    }
   });
-};
+
+  document.getElementById("send").onclick = async () => {
+    const text = document.getElementById("message").value;
+
+    if (!text) return alert("Введите сообщение");
+
+    await addDoc(collection(db, "messages"), {
+      text: text,
+      user: auth.currentUser.email,
+      timestamp: new Date().toISOString()
+    });
+
+    document.getElementById("message").value = "";
+  };
 </script>
 
 </body>

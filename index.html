@@ -65,6 +65,17 @@
       border-radius: 10px;
       margin-top: 5px;
     }
+
+    /* 💖 КРАСИВАЯ КНОПКА ФАЙЛА */
+    .file-upload {
+      display: inline-block;
+      background: #ff4d88;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 5px;
+    }
   </style>
 </head>
 
@@ -80,7 +91,12 @@
     <div id="messages"></div>
 
     <input id="message" placeholder="Введите сообщение" />
-    <input type="file" id="image" />
+
+    <!-- ✅ НОВАЯ КНОПКА -->
+    <label class="file-upload">
+      📸 Добавить картинку
+      <input type="file" id="image" hidden />
+    </label>
 
     <button id="send">Отправить</button>
   </div>
@@ -117,7 +133,7 @@
     apiKey: "AIzaSyB7VHLS8mZGA2ibzgdjP9Rh_CYbSCOXy4E",
     authDomain: "project-1058159525962641435.firebaseapp.com",
     projectId: "project-1058159525962641435",
-    storageBucket: "project-1058159525962641435.appspot.com", // ✅ исправлено
+    storageBucket: "project-1058159525962641435.appspot.com",
     messagingSenderId: "439272881011",
     appId: "1:439272881011:web:0a311dcd8356483941a306",
     measurementId: "G-JJ6FG1MJDJ"

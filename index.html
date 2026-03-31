@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase App</title>
+</head>
+<body>
 
+<button id="login">Войти через Google</button>
+<button id="logout" style="display:none;">Выйти</button>
+
+<div id="form" style="display:none;">
+  <input id="message" placeholder="Введите сообщение">
+  <button id="send">Отправить</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { 
+  getAuth, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  signOut,
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { 
+  getFirestore, 
+  collection, 
+  addDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ВСТАВЬ СВОЙ CONFIG!
+const firebaseConfig = {
+  apiKey: "ТВОЙ_KEY",
+  authDomain: "ТВОЙ_PROJECT.firebaseapp.com",
+  projectId: "ТВОЙ_ID",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+
+const loginBtn = document.getElementById("login");
+const logoutBtn = document.getElementById("logout");
+const form = document.getElementById("form");
+
+loginBtn.onclick = async () => {
+  await signInWithPopup(auth, provider);
+};
+
+logoutBtn.onclick = async () => {
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+    form.style.display = "block";
+  } else {
+    loginBtn.style.display = "block";
+    logoutBtn.style.display = "none";
+    form.style.display = "none";
+  }
+});
+
+document.getElementById("send").onclick = async () => {
+  const text = document.getElementById("message").value;
+
+  await addDoc(collection(db, "messages"), {
+    text: text,
+    user: auth.currentUser.email
+  });
+};
+</script>
+
+</body>
+</html>
